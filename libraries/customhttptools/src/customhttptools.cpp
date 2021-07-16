@@ -50,7 +50,6 @@ void WebService::serviceStart() {
   server.on("/RELAY", std::bind(&WebService::handleCommand, this));
   server.onNotFound(std::bind(&WebService::handleNotFound, this));
   server.begin(httpPort);
-  Serial.println("HTTP server started");
   if (getMDNS()) {
     startMDNS();
   }
@@ -75,6 +74,8 @@ void WebService::handleNotFound() {
 
 
 RelayWebService::RelayWebService(int httpPort, String clientId, int pin) {
+  this->httpPort = httpPort;
+  this->clientId = clientId;
   this->pin = pin;
 }
 
@@ -129,13 +130,15 @@ void RelayWebService::handleOutput() {//Outputs contact status
   message += "\"door\":\"";
   message += String(getState(pin));
   message += "\",\"id\":\"";
-  message += clientId ;
+  message += this->clientId ;
   message += "\"}";
   server.send(200, "application/json", message);
 }
 
 
 TemperatureWebService::TemperatureWebService(int httpPort = 80, String clientId = "",int tPin = 2) {
+  this->httpPort = httpPort;
+  this->clientId = clientId;
     //tPin unused to do in another release
   dht.begin();
   this->new_time = millis();
