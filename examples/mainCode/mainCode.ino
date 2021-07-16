@@ -32,6 +32,6 @@ void loop() {
   httpObject.updateMDNS();
   wifiObject.handleOTAClient();
   /*Temperature*/
-  httpObject.readMultipleValues(numReads,300000);
+ // httpObject.readMultipleValues(numReads,300000);
   httpObject.server.handleClient();
 }
